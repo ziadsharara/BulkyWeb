@@ -1,0 +1,125 @@
+{
+  "Version": 1,
+  "Hash": "33mjG0AbDqPqN7yDLWwi0H90oNUiJtcfXdaB9dGpktM=",
+  "Source": "ArtGallery.API",
+  "BasePath": "_content/ArtGallery.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "ArtGallery.API\\wwwroot",
+      "Source": "ArtGallery.API",
+      "ContentRoot": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\",
+      "BasePath": "_content/ArtGallery.API",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\uploads\\image.jpg",
+      "SourceId": "ArtGallery.API",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\",
+      "BasePath": "_content/ArtGallery.API",
+      "RelativePath": "uploads/image#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "1kgqitexw3",
+      "Integrity": "ryNWOrf0lU3HlOPGCvS+9246vxoJw9WQwtWcAEOsoo0=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\image.jpg"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "uploads/image.1kgqitexw3.jpg",
+      "AssetFile": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\uploads\\image.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "116358"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ryNWOrf0lU3HlOPGCvS+9246vxoJw9WQwtWcAEOsoo0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 23 Apr 2025 18:22:28 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "1kgqitexw3"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/image.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ryNWOrf0lU3HlOPGCvS+9246vxoJw9WQwtWcAEOsoo0="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/image.jpg",
+      "AssetFile": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\uploads\\image.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "116358"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ryNWOrf0lU3HlOPGCvS+9246vxoJw9WQwtWcAEOsoo0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 23 Apr 2025 18:22:28 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ryNWOrf0lU3HlOPGCvS+9246vxoJw9WQwtWcAEOsoo0="
+        }
+      ]
+    }
+  ]
+}

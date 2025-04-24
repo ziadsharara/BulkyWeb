@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\uploads\\image.jpg",
+      "PackagePath": "staticwebassets\\uploads\\image.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.ArtGallery.API.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.ArtGallery.API.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.build.ArtGallery.API.props",
+      "PackagePath": "build\\ArtGallery.API.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildMultiTargeting.ArtGallery.API.props",
+      "PackagePath": "buildMultiTargeting\\ArtGallery.API.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildTransitive.ArtGallery.API.props",
+      "PackagePath": "buildTransitive\\ArtGallery.API.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
