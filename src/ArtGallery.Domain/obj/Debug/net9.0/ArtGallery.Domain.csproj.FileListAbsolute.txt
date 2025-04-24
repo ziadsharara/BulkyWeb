@@ -9,3 +9,4 @@ D:\Projects\ArtGallery\src\ArtGallery.Domain\obj\Debug\net9.0\ArtGallery.Domain.
 D:\Projects\ArtGallery\src\ArtGallery.Domain\obj\Debug\net9.0\refint\ArtGallery.Domain.dll
 D:\Projects\ArtGallery\src\ArtGallery.Domain\obj\Debug\net9.0\ArtGallery.Domain.pdb
 D:\Projects\ArtGallery\src\ArtGallery.Domain\obj\Debug\net9.0\ref\ArtGallery.Domain.dll
+D:\Projects\ArtGallery\src\ArtGallery.Domain\obj\Debug\net9.0\ArtGallery.Domain.sourcelink.json

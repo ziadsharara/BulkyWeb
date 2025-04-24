@@ -1,8 +1,8 @@
 {
   "Files": [
     {
-      "Id": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\uploads\\image.jpg",
-      "PackagePath": "staticwebassets\\uploads\\image.jpg"
+      "Id": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\uploads\\96032b50-5a55-4564-9ecd-19b5f5b4d94d.png",
+      "PackagePath": "staticwebassets\\uploads\\96032b50-5a55-4564-9ecd-19b5f5b4d94d.png"
     },
     {
       "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.ArtGallery.API.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",

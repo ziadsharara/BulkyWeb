@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "33mjG0AbDqPqN7yDLWwi0H90oNUiJtcfXdaB9dGpktM=",
+  "Hash": "yKYf7QFf1z8oDRsyTjuV6cd+sk117m9LjVw/pqV1UZs=",
   "Source": "ArtGallery.API",
   "BasePath": "_content/ArtGallery.API",
   "Mode": "Default",
@@ -17,12 +17,12 @@
   ],
   "Assets": [
     {
-      "Identity": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\uploads\\image.jpg",
+      "Identity": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\uploads\\96032b50-5a55-4564-9ecd-19b5f5b4d94d.png",
       "SourceId": "ArtGallery.API",
       "SourceType": "Discovered",
       "ContentRoot": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\",
       "BasePath": "_content/ArtGallery.API",
-      "RelativePath": "uploads/image#[.{fingerprint}]?.jpg",
+      "RelativePath": "uploads/96032b50-5a55-4564-9ecd-19b5f5b4d94d#[.{fingerprint}]?.png",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -31,17 +31,17 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "1kgqitexw3",
-      "Integrity": "ryNWOrf0lU3HlOPGCvS+9246vxoJw9WQwtWcAEOsoo0=",
+      "Fingerprint": "593cjql44e",
+      "Integrity": "eYZ1CGgORh4Z08wKg2x9k5IJ3hWP+qbijLdAXrBKzk4=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\uploads\\image.jpg"
+      "OriginalItemSpec": "wwwroot\\uploads\\96032b50-5a55-4564-9ecd-19b5f5b4d94d.png"
     }
   ],
   "Endpoints": [
     {
-      "Route": "uploads/image.1kgqitexw3.jpg",
-      "AssetFile": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\uploads\\image.jpg",
+      "Route": "uploads/96032b50-5a55-4564-9ecd-19b5f5b4d94d.593cjql44e.png",
+      "AssetFile": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\uploads\\96032b50-5a55-4564-9ecd-19b5f5b4d94d.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -50,19 +50,19 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "116358"
+          "Value": "143266"
         },
         {
           "Name": "Content-Type",
-          "Value": "image/jpeg"
+          "Value": "image/png"
         },
         {
           "Name": "ETag",
-          "Value": "\"ryNWOrf0lU3HlOPGCvS+9246vxoJw9WQwtWcAEOsoo0=\""
+          "Value": "\"eYZ1CGgORh4Z08wKg2x9k5IJ3hWP+qbijLdAXrBKzk4=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 23 Apr 2025 18:22:28 GMT"
+          "Value": "Thu, 24 Apr 2025 17:11:45 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -72,21 +72,21 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "1kgqitexw3"
+          "Value": "593cjql44e"
         },
         {
           "Name": "label",
-          "Value": "uploads/image.jpg"
+          "Value": "uploads/96032b50-5a55-4564-9ecd-19b5f5b4d94d.png"
         },
         {
           "Name": "integrity",
-          "Value": "sha256-ryNWOrf0lU3HlOPGCvS+9246vxoJw9WQwtWcAEOsoo0="
+          "Value": "sha256-eYZ1CGgORh4Z08wKg2x9k5IJ3hWP+qbijLdAXrBKzk4="
         }
       ]
     },
     {
-      "Route": "uploads/image.jpg",
-      "AssetFile": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\uploads\\image.jpg",
+      "Route": "uploads/96032b50-5a55-4564-9ecd-19b5f5b4d94d.png",
+      "AssetFile": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\uploads\\96032b50-5a55-4564-9ecd-19b5f5b4d94d.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -95,19 +95,19 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "116358"
+          "Value": "143266"
         },
         {
           "Name": "Content-Type",
-          "Value": "image/jpeg"
+          "Value": "image/png"
         },
         {
           "Name": "ETag",
-          "Value": "\"ryNWOrf0lU3HlOPGCvS+9246vxoJw9WQwtWcAEOsoo0=\""
+          "Value": "\"eYZ1CGgORh4Z08wKg2x9k5IJ3hWP+qbijLdAXrBKzk4=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 23 Apr 2025 18:22:28 GMT"
+          "Value": "Thu, 24 Apr 2025 17:11:45 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -117,7 +117,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-ryNWOrf0lU3HlOPGCvS+9246vxoJw9WQwtWcAEOsoo0="
+          "Value": "sha256-eYZ1CGgORh4Z08wKg2x9k5IJ3hWP+qbijLdAXrBKzk4="
         }
       ]
     }

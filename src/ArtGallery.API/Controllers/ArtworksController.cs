@@ -1,9 +1,11 @@
 ﻿using ArtGallery.Application.DTOs;
 using ArtGallery.Application.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ArtGallery.API.Controllers
 {
@@ -12,7 +14,7 @@ namespace ArtGallery.API.Controllers
 	public class ArtworksController : ControllerBase
 	{
 		private readonly IArtworkService _service;
-		private readonly string[] _allowedImageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+		private static readonly string[] _allowedExt = new[] { ".jpg", ".jpeg", ".png", ".gif" };
 
 		public ArtworksController(IArtworkService service)
 		{
@@ -20,10 +22,19 @@ namespace ArtGallery.API.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> GetAll()
+		public async Task<IActionResult> GetAll(
+				[FromQuery] string? category,
+				[FromQuery] string? tag,
+				[FromQuery] string sortBy = "date",
+				[FromQuery] string sortDirection = "desc",
+				[FromQuery] int pageNumber = 1,
+				[FromQuery] int pageSize = 10
+		)
 		{
-			var artworks = await _service.GetAllAsync();
-			return Ok(artworks);
+			var paged = await _service.GetAllAsync(
+					category, tag, sortBy, sortDirection, pageNumber, pageSize
+			);
+			return Ok(paged);
 		}
 
 		[HttpGet("{id}")]
@@ -34,71 +45,68 @@ namespace ArtGallery.API.Controllers
 			return Ok(artwork);
 		}
 
-		[Authorize]
-		[HttpPost]
-		public async Task<IActionResult> Create([FromBody] ArtworkDto dto)
-		{
-			var userId = GetUserId();
-			if (userId == null) return Unauthorized(new { message = "Invalid user ID in token." });
-
-			dto.ArtistId = userId.Value;
-			var created = await _service.CreateAsync(dto);
-			return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
-		}
-
-		[Authorize]
-		[HttpPut("{id}")]
-		public async Task<IActionResult> Update(int id, [FromBody] ArtworkDto dto)
-		{
-			var userId = GetUserId();
-			if (userId == null) return Unauthorized(new { message = "Invalid user ID in token." });
-
-			dto.ArtistId = userId.Value;
-			var updated = await _service.UpdateAsync(id, dto);
-			if (!updated) return NotFound();
-			return NoContent();
-		}
-
-		[Authorize]
-		[HttpDelete("{id}")]
-		public async Task<IActionResult> Delete(int id)
-		{
-			var deleted = await _service.DeleteAsync(id);
-			if (!deleted) return NotFound();
-			return NoContent();
-		}
-
-		[Authorize]
 		[HttpPost("upload-image")]
 		public async Task<IActionResult> UploadImage(IFormFile file)
 		{
 			if (file == null || file.Length == 0)
 				return BadRequest("No file uploaded.");
 
-			var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
-			if (!_allowedImageExtensions.Contains(extension))
-				return BadRequest("Only image files (jpg, png, gif) are allowed.");
+			var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+			if (!_allowedExt.Contains(ext))
+				return BadRequest("Only image files are allowed.");
 
-			var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-			if (!Directory.Exists(uploadsFolder))
-				Directory.CreateDirectory(uploadsFolder);
+			var uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+			if (!Directory.Exists(uploads))
+				Directory.CreateDirectory(uploads);
 
-			var uniqueFileName = $"{Guid.NewGuid()}{extension}";
-			var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+			var name = $"{Guid.NewGuid()}{ext}";
+			var path = Path.Combine(uploads, name);
+			using var stream = new FileStream(path, FileMode.Create);
+			await file.CopyToAsync(stream);
 
-			using (var stream = new FileStream(filePath, FileMode.Create))
-			{
-				await file.CopyToAsync(stream);
-			}
-
-			var imageUrl = $"/uploads/{uniqueFileName}";
-			return Ok(new { imageUrl });
+			return Ok(new { imageUrl = $"/uploads/{name}" });
 		}
 
-		private int? GetUserId()
+		[HttpPost]
+		public async Task<IActionResult> Create([FromForm] CreateArtworkDto dto, IFormFile file)
 		{
-			var userIdStr = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
-			return int.TryParse(userIdStr, out var userId) ? userId : null;
+
+			if (file != null && file.Length > 0)
+			{
+				var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+				if (!_allowedExt.Contains(ext))
+					return BadRequest("Only image files are allowed.");
+
+				var uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+				if (!Directory.Exists(uploads))
+					Directory.CreateDirectory(uploads);
+
+				var name = $"{Guid.NewGuid()}{ext}";
+				var path = Path.Combine(uploads, name);
+				using var stream = new FileStream(path, FileMode.Create);
+				await file.CopyToAsync(stream);
+
+				dto.ImageUrl = $"/uploads/{name}";
+			}
+
+			var created = await _service.CreateAsync(dto);
+			return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+		}
+
+		[HttpPut("{id}")]
+		public async Task<IActionResult> Update(int id, [FromBody] ArtworkDto dto)
+		{
+			var updated = await _service.UpdateAsync(id, dto);
+			if (!updated) return NotFound();
+			return NoContent();
+		}
+
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> Delete(int id)
+		{
+			var deleted = await _service.DeleteAsync(id);
+			if (!deleted) return NotFound();
+			return NoContent();
 		}
 	}
 }

@@ -160,13 +160,6 @@ D:\Projects\ArtGallery\src\ArtGallery.API\bin\Debug\net9.0\ru\Microsoft.CodeAnal
 D:\Projects\ArtGallery\src\ArtGallery.API\bin\Debug\net9.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 D:\Projects\ArtGallery\src\ArtGallery.API\bin\Debug\net9.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 D:\Projects\ArtGallery\src\ArtGallery.API\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
-D:\Projects\ArtGallery\src\ArtGallery.API\obj\Debug\net9.0\staticwebassets\msbuild.ArtGallery.API.Microsoft.AspNetCore.StaticWebAssets.props
-D:\Projects\ArtGallery\src\ArtGallery.API\obj\Debug\net9.0\staticwebassets\msbuild.ArtGallery.API.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-D:\Projects\ArtGallery\src\ArtGallery.API\obj\Debug\net9.0\staticwebassets\msbuild.build.ArtGallery.API.props
-D:\Projects\ArtGallery\src\ArtGallery.API\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.ArtGallery.API.props
-D:\Projects\ArtGallery\src\ArtGallery.API\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.ArtGallery.API.props
-D:\Projects\ArtGallery\src\ArtGallery.API\obj\Debug\net9.0\staticwebassets.pack.json
-D:\Projects\ArtGallery\src\ArtGallery.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 D:\Projects\ArtGallery\src\ArtGallery.API\bin\Debug\net9.0\AutoMapper.dll
 D:\Projects\ArtGallery\src\ArtGallery.API\bin\Debug\net9.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 D:\Projects\ArtGallery\src\ArtGallery.API\bin\Debug\net9.0\Microsoft.OpenApi.dll
@@ -176,3 +169,11 @@ D:\Projects\ArtGallery\src\ArtGallery.API\bin\Debug\net9.0\Swashbuckle.AspNetCor
 D:\Projects\ArtGallery\src\ArtGallery.API\obj\Debug\net9.0\ArtGallery.API.MvcApplicationPartsAssemblyInfo.cs
 D:\Projects\ArtGallery\src\ArtGallery.API\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\Projects\ArtGallery\src\ArtGallery.API\bin\Debug\net9.0\ArtGallery.API.staticwebassets.runtime.json
+D:\Projects\ArtGallery\src\ArtGallery.API\obj\Debug\net9.0\ArtGallery.API.sourcelink.json
+D:\Projects\ArtGallery\src\ArtGallery.API\obj\Debug\net9.0\staticwebassets\msbuild.ArtGallery.API.Microsoft.AspNetCore.StaticWebAssets.props
+D:\Projects\ArtGallery\src\ArtGallery.API\obj\Debug\net9.0\staticwebassets\msbuild.ArtGallery.API.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+D:\Projects\ArtGallery\src\ArtGallery.API\obj\Debug\net9.0\staticwebassets\msbuild.build.ArtGallery.API.props
+D:\Projects\ArtGallery\src\ArtGallery.API\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.ArtGallery.API.props
+D:\Projects\ArtGallery\src\ArtGallery.API\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.ArtGallery.API.props
+D:\Projects\ArtGallery\src\ArtGallery.API\obj\Debug\net9.0\staticwebassets.pack.json
+D:\Projects\ArtGallery\src\ArtGallery.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

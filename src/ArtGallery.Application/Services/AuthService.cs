@@ -24,14 +24,13 @@ namespace ArtGallery.Application.Services
 			_config = config;
 		}
 
-		public async Task<UserDto> RegisterAsync(RegisterDto dto)
+		public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto)
 		{
 			if (await _db.Users.AnyAsync(u => u.Email == dto.Email))
 				throw new InvalidOperationException("Email already in use.");
 
 			using var sha = SHA256.Create();
-			var hash = Convert.ToHexString(
-					sha.ComputeHash(Encoding.UTF8.GetBytes(dto.Password)));
+			var hash = Convert.ToHexString(sha.ComputeHash(Encoding.UTF8.GetBytes(dto.Password)));
 
 			var user = new User
 			{
@@ -44,53 +43,66 @@ namespace ArtGallery.Application.Services
 			_db.Users.Add(user);
 			await _db.SaveChangesAsync();
 
-			return new UserDto
+			var token = GenerateJwtToken(user);
+
+			return new AuthResponseDto
 			{
 				Id = user.Id,
 				Username = user.Username,
 				Email = user.Email,
-				Role = user.Role
+				Role = user.Role,
+				Token = token
 			};
 		}
 
-		public async Task<string> LoginAsync(LoginDto dto)
+		public async Task<AuthResponseDto> LoginAsync(LoginDto dto)
 		{
-			var user = await _db.Users
-					.SingleOrDefaultAsync(u => u.Email == dto.Email);
+			var user = await _db.Users.SingleOrDefaultAsync(u => u.Email == dto.Email);
 			if (user == null)
 				throw new UnauthorizedAccessException("Invalid credentials.");
 
 			using var sha = SHA256.Create();
-			var hash = Convert.ToHexString(
-					sha.ComputeHash(Encoding.UTF8.GetBytes(dto.Password)));
-
+			var hash = Convert.ToHexString(sha.ComputeHash(Encoding.UTF8.GetBytes(dto.Password)));
 			if (user.PasswordHash != hash)
 				throw new UnauthorizedAccessException("Invalid credentials.");
 
-			// Build JWT
+			var token = GenerateJwtToken(user);
+
+			return new AuthResponseDto
+			{
+				Id = user.Id,
+				Username = user.Username,
+				Email = user.Email,
+				Role = user.Role,
+				Token = token
+			};
+		}
+
+		private string GenerateJwtToken(User user)
+		{
 			var jwt = _config.GetSection("Jwt");
 			var key = Encoding.UTF8.GetBytes(jwt["Key"]!);
+			var expires = DateTime.UtcNow.AddMinutes(double.Parse(jwt["DurationMinutes"]!));
+
 			var claims = new[] {
-								new Claim(JwtRegisteredClaimNames.Sub,   user.Id.ToString()),
-								new Claim(JwtRegisteredClaimNames.Email, user.Email),
-								new Claim("role",                        user.Role)
-						};
+		new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+		new Claim(JwtRegisteredClaimNames.Email, user.Email),
+		new Claim("role", user.Role)
+};
+
+
 			var creds = new SigningCredentials(
-												new SymmetricSecurityKey(key),
-												SecurityAlgorithms.HmacSha256);
-			var expires = DateTime.UtcNow
-										.AddMinutes(double.Parse(jwt["DurationMinutes"]!));
+					new SymmetricSecurityKey(key),
+					SecurityAlgorithms.HmacSha256);
 
 			var token = new JwtSecurityToken(
 					issuer: jwt["Issuer"],
 					audience: jwt["Audience"],
 					claims: claims,
 					expires: expires,
-					signingCredentials: creds
-			);
+					signingCredentials: creds);
 
-			return new JwtSecurityTokenHandler()
-						 .WriteToken(token);
+			return new JwtSecurityTokenHandler().WriteToken(token);
 		}
 	}
 }

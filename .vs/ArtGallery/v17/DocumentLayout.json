@@ -11,24 +11,12 @@
       "RelativeMoniker": "D:0:0:{59E449D0-BAA5-4798-BB9A-8F4B80144184}|src\\ArtGallery.Application\\ArtGallery.Application.csproj|solutionrelative:src\\artgallery.application\\services\\artworkservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{59E449D0-BAA5-4798-BB9A-8F4B80144184}|src\\ArtGallery.Application\\ArtGallery.Application.csproj|d:\\projects\\artgallery\\src\\artgallery.application\\services\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{59E449D0-BAA5-4798-BB9A-8F4B80144184}|src\\ArtGallery.Application\\ArtGallery.Application.csproj|solutionrelative:src\\artgallery.application\\services\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{59E449D0-BAA5-4798-BB9A-8F4B80144184}|src\\ArtGallery.Application\\ArtGallery.Application.csproj|d:\\projects\\artgallery\\src\\artgallery.application\\services\\iartworkservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{59E449D0-BAA5-4798-BB9A-8F4B80144184}|src\\ArtGallery.Application\\ArtGallery.Application.csproj|solutionrelative:src\\artgallery.application\\services\\iartworkservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0322D947-98C4-4DD4-864D-AC4E6C537572}|src\\ArtGallery.API\\ArtGallery.API.csproj|d:\\projects\\artgallery\\src\\artgallery.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0322D947-98C4-4DD4-864D-AC4E6C537572}|src\\ArtGallery.API\\ArtGallery.API.csproj|solutionrelative:src\\artgallery.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0322D947-98C4-4DD4-864D-AC4E6C537572}|src\\ArtGallery.API\\ArtGallery.API.csproj|d:\\projects\\artgallery\\src\\artgallery.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{0322D947-98C4-4DD4-864D-AC4E6C537572}|src\\ArtGallery.API\\ArtGallery.API.csproj|solutionrelative:src\\artgallery.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0322D947-98C4-4DD4-864D-AC4E6C537572}|src\\ArtGallery.API\\ArtGallery.API.csproj|d:\\projects\\artgallery\\src\\artgallery.api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0322D947-98C4-4DD4-864D-AC4E6C537572}|src\\ArtGallery.API\\ArtGallery.API.csproj|solutionrelative:src\\artgallery.api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{59E449D0-BAA5-4798-BB9A-8F4B80144184}|src\\ArtGallery.Application\\ArtGallery.Application.csproj|d:\\projects\\artgallery\\src\\artgallery.application\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{59E449D0-BAA5-4798-BB9A-8F4B80144184}|src\\ArtGallery.Application\\ArtGallery.Application.csproj|solutionrelative:src\\artgallery.application\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{59E449D0-BAA5-4798-BB9A-8F4B80144184}|src\\ArtGallery.Application\\ArtGallery.Application.csproj|d:\\projects\\artgallery\\src\\artgallery.application\\dtos\\pagedresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{59E449D0-BAA5-4798-BB9A-8F4B80144184}|src\\ArtGallery.Application\\ArtGallery.Application.csproj|solutionrelative:src\\artgallery.application\\dtos\\pagedresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,11 +26,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PagedResult.cs",
+              "DocumentMoniker": "D:\\Projects\\ArtGallery\\src\\ArtGallery.Application\\DTOs\\PagedResult.cs",
+              "RelativeDocumentMoniker": "src\\ArtGallery.Application\\DTOs\\PagedResult.cs",
+              "ToolTip": "D:\\Projects\\ArtGallery\\src\\ArtGallery.Application\\DTOs\\PagedResult.cs",
+              "RelativeToolTip": "src\\ArtGallery.Application\\DTOs\\PagedResult.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-24T22:28:51.022Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -52,9 +53,9 @@
               "RelativeDocumentMoniker": "src\\ArtGallery.API\\Controllers\\ArtworksController.cs",
               "ToolTip": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\Controllers\\ArtworksController.cs",
               "RelativeToolTip": "src\\ArtGallery.API\\Controllers\\ArtworksController.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAA3wCMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAUwFcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-24T02:08:17.396Z",
+              "WhenOpened": "2025-04-24T21:57:26.025Z",
               "EditorCaption": ""
             },
             {
@@ -65,74 +66,22 @@
               "RelativeDocumentMoniker": "src\\ArtGallery.Application\\Services\\ArtworkService.cs",
               "ToolTip": "D:\\Projects\\ArtGallery\\src\\ArtGallery.Application\\Services\\ArtworkService.cs",
               "RelativeToolTip": "src\\ArtGallery.Application\\Services\\ArtworkService.cs",
-              "ViewState": "AgIAACcAAAAAAAAAAAAowGEAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAH8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-24T02:02:55.279Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "UserController.cs",
-              "DocumentMoniker": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\Controllers\\UserController.cs",
-              "RelativeDocumentMoniker": "src\\ArtGallery.API\\Controllers\\UserController.cs",
-              "ToolTip": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\Controllers\\UserController.cs",
-              "RelativeToolTip": "src\\ArtGallery.API\\Controllers\\UserController.cs",
-              "ViewState": "AgIAACYAAAAAAAAAAAAswDkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-24T01:55:37.332Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "AuthService.cs",
-              "DocumentMoniker": "D:\\Projects\\ArtGallery\\src\\ArtGallery.Application\\Services\\AuthService.cs",
-              "RelativeDocumentMoniker": "src\\ArtGallery.Application\\Services\\AuthService.cs",
-              "ToolTip": "D:\\Projects\\ArtGallery\\src\\ArtGallery.Application\\Services\\AuthService.cs",
-              "RelativeToolTip": "src\\ArtGallery.Application\\Services\\AuthService.cs",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAkwGAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-24T01:52:37.101Z",
+              "WhenOpened": "2025-04-24T21:57:09.606Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "IAuthService.cs",
-              "DocumentMoniker": "D:\\Projects\\ArtGallery\\src\\ArtGallery.Application\\Services\\IAuthService.cs",
-              "RelativeDocumentMoniker": "src\\ArtGallery.Application\\Services\\IAuthService.cs",
-              "ToolTip": "D:\\Projects\\ArtGallery\\src\\ArtGallery.Application\\Services\\IAuthService.cs",
-              "RelativeToolTip": "src\\ArtGallery.Application\\Services\\IAuthService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAACAAAAAAAAAA==",
+              "Title": "IArtworkService.cs",
+              "DocumentMoniker": "D:\\Projects\\ArtGallery\\src\\ArtGallery.Application\\Services\\IArtworkService.cs",
+              "RelativeDocumentMoniker": "src\\ArtGallery.Application\\Services\\IArtworkService.cs",
+              "ToolTip": "D:\\Projects\\ArtGallery\\src\\ArtGallery.Application\\Services\\IArtworkService.cs",
+              "RelativeToolTip": "src\\ArtGallery.Application\\Services\\IArtworkService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-24T01:52:16.713Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\Program.cs",
-              "RelativeDocumentMoniker": "src\\ArtGallery.API\\Program.cs",
-              "ToolTip": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\Program.cs",
-              "RelativeToolTip": "src\\ArtGallery.API\\Program.cs",
-              "ViewState": "AgIAAD8AAAAAAAAAAAAkwGwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-24T01:51:10.161Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\appsettings.json",
-              "RelativeDocumentMoniker": "src\\ArtGallery.API\\appsettings.json",
-              "ToolTip": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\appsettings.json",
-              "RelativeToolTip": "src\\ArtGallery.API\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-24T01:50:07.397Z",
+              "WhenOpened": "2025-04-24T21:56:42.288Z",
               "EditorCaption": ""
             }
           ]

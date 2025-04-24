@@ -14,11 +14,11 @@ var configuration = builder.Configuration;
 
 // 1) Connection string
 var connectionString = configuration.GetConnectionString("DefaultConnection")
-	?? throw new InvalidOperationException("Connection string 'DefaultConnection' is not configured.");
+		?? throw new InvalidOperationException("Connection string 'DefaultConnection' is not configured.");
 
 // 2) EF Core
 builder.Services.AddDbContext<AppDbContext>(options =>
-	options.UseSqlServer(connectionString));
+		options.UseSqlServer(connectionString));
 
 // 3) Application & Infrastructure services
 builder.Services.AddApplicationServices();
@@ -33,27 +33,24 @@ builder.Services.AddControllers();
 // 6) JWT Authentication
 var jwt = configuration.GetSection("Jwt");
 builder.Services
-	.AddAuthentication(options =>
-	{
-		options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-		options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-	})
-	.AddJwtBearer(options =>
-	{
-		options.RequireHttpsMetadata = true;
-		options.SaveToken = true;
-		options.TokenValidationParameters = new TokenValidationParameters
+		.AddAuthentication(options =>
 		{
-			ValidateIssuer = true,
-			ValidIssuer = jwt["Issuer"],
-			ValidateAudience = true,
-			ValidAudience = jwt["Audience"],
-			ValidateIssuerSigningKey = true,
-			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!)),
-			ValidateLifetime = true,
-			ClockSkew = TimeSpan.Zero
-		};
-	});
+			options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+			options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+		})
+		.AddJwtBearer(options =>
+		{
+			options.RequireHttpsMetadata = false;
+			options.SaveToken = true;
+			options.TokenValidationParameters = new TokenValidationParameters
+			{
+				ValidateIssuer = false,
+				ValidateAudience = false,
+				ValidateIssuerSigningKey = false,
+				ValidateLifetime = false, 
+			};
+		});
+
 
 // 7) Swagger / OpenAPI
 builder.Services.AddEndpointsApiExplorer();
@@ -69,12 +66,10 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// 8) Ensure wwwroot/uploads exists
+// 8) Ensure uploads folder exists
 var uploadsPath = Path.Combine(app.Environment.WebRootPath ?? "wwwroot", "uploads");
 if (!Directory.Exists(uploadsPath))
-{
 	Directory.CreateDirectory(uploadsPath);
-}
 
 // 9) Middleware pipeline
 if (app.Environment.IsDevelopment())
@@ -89,10 +84,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Serve static files from wwwroot
+// Serve static files
 app.UseStaticFiles();
-
-// Serve files from wwwroot/uploads
 app.UseStaticFiles(new StaticFileOptions
 {
 	FileProvider = new PhysicalFileProvider(uploadsPath),

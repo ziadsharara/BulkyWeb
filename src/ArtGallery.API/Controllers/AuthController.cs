@@ -2,33 +2,41 @@
 using ArtGallery.Application.DTOs;
 using ArtGallery.Application.Services;
 
-namespace ArtGallery.API.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-public class AuthController : ControllerBase
+namespace ArtGallery.API.Controllers
 {
-	private readonly IUserService _userService;
-
-	public AuthController(IUserService userService)
+	[ApiController]
+	[Route("api/[controller]")]
+	public class AuthController : ControllerBase
 	{
-		_userService = userService;
-	}
+		private readonly IAuthService _auth;
 
-	[HttpPost("register")]
-	public async Task<IActionResult> Register(RegisterDto dto)
-	{
-		var result = await _userService.RegisterAsync(dto);
-		return Ok(result);
-	}
+		public AuthController(IAuthService auth) => _auth = auth;
 
-	[HttpPost("login")]
-	public async Task<IActionResult> Login(LoginDto dto)
-	{
-		var result = await _userService.LoginAsync(dto);
-		if (result == null)
-			return Unauthorized("Invalid credentials");
+		[HttpPost("register")]
+		public async Task<IActionResult> Register([FromBody] RegisterDto dto)
+		{
+			try
+			{
+				var result = await _auth.RegisterAsync(dto);
+				return Ok(result);
+			}
+			catch (InvalidOperationException ex)
+			{
+				return BadRequest(new { message = ex.Message });
+			}
+		}
 
-		return Ok(result);
+		[HttpPost("login")]
+		public async Task<IActionResult> Login([FromBody] LoginDto dto)
+		{
+			var result = await _auth.LoginAsync(dto);
+			if (result == null)
+				return Unauthorized("Invalid credentials");
+
+			Console.WriteLine(result);
+
+			return Ok(result);
+		}
+
 	}
 }

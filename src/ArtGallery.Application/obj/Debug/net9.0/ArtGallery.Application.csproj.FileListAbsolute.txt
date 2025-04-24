@@ -15,3 +15,4 @@ D:\Projects\ArtGallery\src\ArtGallery.Application\obj\Debug\net9.0\ArtGallery.Ap
 D:\Projects\ArtGallery\src\ArtGallery.Application\obj\Debug\net9.0\ref\ArtGallery.Application.dll
 D:\Projects\ArtGallery\src\ArtGallery.Application\bin\Debug\net9.0\ArtGallery.Infrastructure.dll
 D:\Projects\ArtGallery\src\ArtGallery.Application\bin\Debug\net9.0\ArtGallery.Infrastructure.pdb
+D:\Projects\ArtGallery\src\ArtGallery.Application\obj\Debug\net9.0\ArtGallery.Application.sourcelink.json
