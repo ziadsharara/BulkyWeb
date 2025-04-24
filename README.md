@@ -30,7 +30,7 @@ This is the backend API for an ArtGallery platform where users can manage artwor
 ## Setup
 
 ### **1. Prerequisites**
-- .NET 6.0 SDK
+- .NET 9.0 SDK
 - SQL Server
 - Postman or any API testing tool
 
