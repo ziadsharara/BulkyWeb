@@ -1,11 +1,13 @@
 ﻿using ArtGallery.Application.DTOs;
 using ArtGallery.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace ArtGallery.API.Controllers
 {
@@ -31,9 +33,7 @@ namespace ArtGallery.API.Controllers
 				[FromQuery] int pageSize = 10
 		)
 		{
-			var paged = await _service.GetAllAsync(
-					category, tag, sortBy, sortDirection, pageNumber, pageSize
-			);
+			var paged = await _service.GetAllAsync(category, tag, sortBy, sortDirection, pageNumber, pageSize);
 			return Ok(paged);
 		}
 
@@ -41,11 +41,12 @@ namespace ArtGallery.API.Controllers
 		public async Task<IActionResult> GetById(int id)
 		{
 			var artwork = await _service.GetByIdAsync(id);
-			if (artwork == null) return NotFound();
+			if (artwork == null) return NotFound("Artwork not found.");
 			return Ok(artwork);
 		}
 
 		[HttpPost("upload-image")]
+		[Authorize]
 		public async Task<IActionResult> UploadImage(IFormFile file)
 		{
 			if (file == null || file.Length == 0)
@@ -68,8 +69,11 @@ namespace ArtGallery.API.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Create([FromForm] CreateArtworkDto dto, IFormFile file)
+		[Authorize]
+		public async Task<IActionResult> Create([FromForm] CreateArtworkDto dto, IFormFile? file)
 		{
+			var userId = GetUserIdFromToken();
+			if (userId == null) return Unauthorized("Invalid or missing token.");
 
 			if (file != null && file.Length > 0)
 			{
@@ -89,24 +93,58 @@ namespace ArtGallery.API.Controllers
 				dto.ImageUrl = $"/uploads/{name}";
 			}
 
-			var created = await _service.CreateAsync(dto);
+			var created = await _service.CreateAsync(dto, userId.Value);  // Pass userId here
 			return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
 		}
 
+
 		[HttpPut("{id}")]
+		[Authorize]
 		public async Task<IActionResult> Update(int id, [FromBody] ArtworkDto dto)
 		{
 			var updated = await _service.UpdateAsync(id, dto);
-			if (!updated) return NotFound();
+			if (!updated) return NotFound("Artwork not found.");
 			return NoContent();
 		}
 
 		[HttpDelete("{id}")]
+		[Authorize]
 		public async Task<IActionResult> Delete(int id)
 		{
 			var deleted = await _service.DeleteAsync(id);
-			if (!deleted) return NotFound();
+			if (!deleted) return NotFound("Artwork not found.");
 			return NoContent();
+		}
+
+		[HttpPost("{id}/like")]
+		[Authorize]
+		public async Task<IActionResult> LikeArtwork(int id)
+		{
+			var userId = GetUserIdFromToken();
+			if (userId == null) return Unauthorized("Invalid or missing token.");
+
+			var result = await _service.LikeAsync(id, userId.Value);
+			if (!result) return NotFound("Artwork not found.");
+			return Ok("Liked");
+		}
+
+		[HttpPost("{id}/unlike")]
+		[Authorize]
+		public async Task<IActionResult> UnlikeArtwork(int id)
+		{
+			var userId = GetUserIdFromToken();
+			if (userId == null) return Unauthorized("Invalid or missing token.");
+
+			var result = await _service.UnlikeAsync(id, userId.Value);
+			if (!result) return NotFound("Artwork not found.");
+			return Ok("Unliked");
+		}
+
+		// ✅ Helper: Extract UserId from JWT Token
+		private int? GetUserIdFromToken()
+		{
+			var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+			return claim != null && int.TryParse(claim.Value, out var id) ? id : null;
 		}
 	}
 }

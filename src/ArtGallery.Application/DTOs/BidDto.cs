@@ -7,6 +7,7 @@ namespace ArtGallery.Application.DTOs
 		public int ArtworkId { get; set; }
 		public int BuyerId { get; set; }
 		public decimal Amount { get; set; }
-		public DateTime Timestamp { get; internal set; }
+		public DateTime Timestamp { get;  set; }
+
 	}
 }

@@ -18,5 +18,7 @@ namespace ArtGallery.Domain.Entities
 		public User Artist { get; set; } = default!;
 
 		public ICollection<Bid> Bids { get; set; } = new List<Bid>();
+		public ICollection<ArtworkLike> Likes { get; set; } = new List<ArtworkLike>();
 	}
+
 }

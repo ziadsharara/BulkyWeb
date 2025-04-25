@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.FileProviders;
+using ArtGallery.API.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -24,14 +25,17 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(connectionString);
 
-// 4) AuthService
+// 4) AuthService & AuctionService
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAuctionService, AuctionService>();
 
 // 5) Controllers
 builder.Services.AddControllers();
 
 // 6) JWT Authentication
 var jwt = configuration.GetSection("Jwt");
+var key = Encoding.UTF8.GetBytes(jwt["Key"] ?? throw new InvalidOperationException("JWT Key is not configured."));
+
 builder.Services
 		.AddAuthentication(options =>
 		{
@@ -44,13 +48,18 @@ builder.Services
 			options.SaveToken = true;
 			options.TokenValidationParameters = new TokenValidationParameters
 			{
-				ValidateIssuer = false,
-				ValidateAudience = false,
-				ValidateIssuerSigningKey = false,
-				ValidateLifetime = false, 
+				ValidateIssuer = true,
+				ValidateAudience = true,
+				ValidateLifetime = true,
+				ValidateIssuerSigningKey = true,
+
+				ValidIssuer = jwt["Issuer"],
+				ValidAudience = jwt["Audience"],
+				IssuerSigningKey = new SymmetricSecurityKey(key),
+
+				ClockSkew = TimeSpan.Zero
 			};
 		});
-
 
 // 7) Swagger / OpenAPI
 builder.Services.AddEndpointsApiExplorer();
@@ -64,14 +73,17 @@ builder.Services.AddSwaggerGen(c =>
 	});
 });
 
+// 8) SignalR
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
-// 8) Ensure uploads folder exists
+// 9) Ensure uploads folder exists
 var uploadsPath = Path.Combine(app.Environment.WebRootPath ?? "wwwroot", "uploads");
 if (!Directory.Exists(uploadsPath))
 	Directory.CreateDirectory(uploadsPath);
 
-// 9) Middleware pipeline
+// 10) Middleware pipeline
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
@@ -96,6 +108,10 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseAuthentication();
 app.UseAuthorization();
 
+// SignalR Hub
+app.MapHub<AuctionHub>("/hubs/auction");
+
+// Controllers
 app.MapControllers();
 
 app.Run();

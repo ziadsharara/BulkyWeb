@@ -5,18 +5,15 @@ namespace ArtGallery.Application.Services
 {
 	public interface IArtworkService
 	{
-		Task<PagedResult<ArtworkDto>> GetAllAsync(
-				string? category = null,
-				string? tag = null,
-				string sortBy = "date",
-				string sortDirection = "desc",
-				int pageNumber = 1,
-				int pageSize = 10
-		);
-
+		Task<ArtworkDto> CreateAsync(CreateArtworkDto dto, int userId);
+		Task<PagedResult<ArtworkDto>> GetAllAsync(string? category, string? tag, string sortBy, string sortDirection, int pageNumber, int pageSize);
+		Task<PagedResult<ArtworkDto>> FilterAndSortAsync(ArtworkFilterDto filter);
 		Task<ArtworkDto?> GetByIdAsync(int id);
-		Task<ArtworkDto> CreateAsync(CreateArtworkDto dto);
 		Task<bool> UpdateAsync(int id, ArtworkDto dto);
 		Task<bool> DeleteAsync(int id);
+
+		Task<bool> LikeAsync(int artworkId, int userId);
+		Task<bool> UnlikeAsync(int artworkId, int userId);
+
 	}
 }

@@ -5,18 +5,20 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ArtGallery.Application.Services
 {
 	public class ArtworkService : IArtworkService
 	{
 		private readonly AppDbContext _context;
+
 		public ArtworkService(AppDbContext context) => _context = context;
 
-		public async Task<ArtworkDto> CreateAsync(CreateArtworkDto dto)
+		public async Task<ArtworkDto> CreateAsync(CreateArtworkDto dto, int userId)
 		{
-			if (!await _context.Users.AnyAsync(u => u.Id == dto.ArtistId))
-				throw new KeyNotFoundException($"Artist with ID {dto.ArtistId} not found.");
+			if (!await _context.Users.AnyAsync(u => u.Id == userId))
+				throw new KeyNotFoundException($"User with ID {userId} not found.");
 
 			var artwork = new Artwork
 			{
@@ -27,7 +29,7 @@ namespace ArtGallery.Application.Services
 				Category = dto.Category,
 				ImageUrl = dto.ImageUrl,
 				Tags = dto.Tags,
-				ArtistId = dto.ArtistId
+				ArtistId = userId
 			};
 
 			_context.Artworks.Add(artwork);
@@ -36,12 +38,12 @@ namespace ArtGallery.Application.Services
 		}
 
 		public async Task<PagedResult<ArtworkDto>> GetAllAsync(
-				string? category,
-				string? tag,
-				string sortBy,
-				string sortDirection,
-				int pageNumber,
-				int pageSize
+			string? category,
+			string? tag,
+			string sortBy,
+			string sortDirection,
+			int pageNumber,
+			int pageSize
 		)
 		{
 			var query = _context.Artworks.AsQueryable();
@@ -52,7 +54,10 @@ namespace ArtGallery.Application.Services
 			if (!string.IsNullOrWhiteSpace(tag))
 				query = query.Where(a => a.Tags.Contains(tag));
 
-			query = (sortBy.ToLower(), sortDirection.ToLower()) switch
+			sortBy = sortBy?.ToLower() ?? "createdat";
+			sortDirection = sortDirection?.ToLower() ?? "desc";
+
+			query = (sortBy, sortDirection) switch
 			{
 				("price", "asc") => query.OrderBy(a => a.Price),
 				("price", "desc") => query.OrderByDescending(a => a.Price),
@@ -62,10 +67,10 @@ namespace ArtGallery.Application.Services
 
 			var totalCount = await query.CountAsync();
 			var items = await query
-					.Skip((pageNumber - 1) * pageSize)
-					.Take(pageSize)
-					.Select(a => ToDto(a))
-					.ToListAsync();
+				.Skip((pageNumber - 1) * pageSize)
+				.Take(pageSize)
+				.Select(a => ToDto(a))
+				.ToListAsync();
 
 			return new PagedResult<ArtworkDto>
 			{
@@ -76,27 +81,71 @@ namespace ArtGallery.Application.Services
 			};
 		}
 
+		public async Task<PagedResult<ArtworkDto>> FilterAndSortAsync(ArtworkFilterDto filter)
+		{
+			var query = _context.Artworks.AsQueryable();
+
+			if (!string.IsNullOrWhiteSpace(filter.Category))
+				query = query.Where(a => a.Category == filter.Category);
+
+			if (!string.IsNullOrWhiteSpace(filter.Tag))
+				query = query.Where(a => a.Tags.Contains(filter.Tag));
+
+			if (filter.MinPrice.HasValue)
+				query = query.Where(a => a.Price >= filter.MinPrice.Value);
+
+			if (filter.MaxPrice.HasValue)
+				query = query.Where(a => a.Price <= filter.MaxPrice.Value);
+
+			var sortBy = filter.SortBy?.ToLower() ?? "createdat";
+			var sortDirection = filter.SortDirection?.ToLower() ?? "desc";
+
+			query = (sortBy, sortDirection) switch
+			{
+				("price", "asc") => query.OrderBy(a => a.Price),
+				("price", "desc") => query.OrderByDescending(a => a.Price),
+				(_, "asc") => query.OrderBy(a => a.CreatedAt),
+				_ => query.OrderByDescending(a => a.CreatedAt),
+			};
+
+			var totalCount = await query.CountAsync();
+			var items = await query
+				.Skip((filter.PageNumber - 1) * filter.PageSize)
+				.Take(filter.PageSize)
+				.Select(a => ToDto(a))
+				.ToListAsync();
+
+			return new PagedResult<ArtworkDto>
+			{
+				PageNumber = filter.PageNumber,
+				PageSize = filter.PageSize,
+				TotalCount = totalCount,
+				Items = items
+			};
+		}
+
 		public async Task<ArtworkDto?> GetByIdAsync(int id)
 		{
-			var a = await _context.Artworks.FindAsync(id);
-			return a is null ? null : ToDto(a);
+			var artwork = await _context.Artworks.SingleOrDefaultAsync(a => a.Id == id);
+			return artwork is null ? null : ToDto(artwork);
 		}
 
 		public async Task<bool> UpdateAsync(int id, ArtworkDto dto)
 		{
-			var a = await _context.Artworks.FindAsync(id);
-			if (a == null) return false;
+			var artwork = await _context.Artworks.FindAsync(id);
+			if (artwork == null) return false;
+
 			if (!await _context.Users.AnyAsync(u => u.Id == dto.ArtistId))
 				return false;
 
-			a.Title = dto.Title;
-			a.Description = dto.Description;
-			a.Price = dto.Price;
-			a.CreatedAt = dto.CreatedAt;
-			a.Category = dto.Category;
-			a.ImageUrl = dto.ImageUrl;
-			a.Tags = dto.Tags;
-			a.ArtistId = dto.ArtistId;
+			artwork.Title = dto.Title;
+			artwork.Description = dto.Description;
+			artwork.Price = dto.Price;
+			artwork.CreatedAt = dto.CreatedAt;
+			artwork.Category = dto.Category;
+			artwork.ImageUrl = dto.ImageUrl;
+			artwork.Tags = dto.Tags;
+			artwork.ArtistId = dto.ArtistId;
 
 			await _context.SaveChangesAsync();
 			return true;
@@ -104,9 +153,10 @@ namespace ArtGallery.Application.Services
 
 		public async Task<bool> DeleteAsync(int id)
 		{
-			var a = await _context.Artworks.FindAsync(id);
-			if (a == null) return false;
-			_context.Artworks.Remove(a);
+			var artwork = await _context.Artworks.FindAsync(id);
+			if (artwork == null) return false;
+
+			_context.Artworks.Remove(artwork);
 			await _context.SaveChangesAsync();
 			return true;
 		}
@@ -123,5 +173,53 @@ namespace ArtGallery.Application.Services
 			Tags = artwork.Tags,
 			ArtistId = artwork.ArtistId
 		};
+
+		public async Task<bool> LikeAsync(int artworkId, int userId)
+		{
+			var artwork = await _context.Artworks.FindAsync(artworkId);
+			var user = await _context.Users.Include(u => u.LikedArtworks).FirstOrDefaultAsync(u => u.Id == userId);
+
+			if (artwork == null || user == null) return false;
+
+			// Create an ArtworkLike entity
+			var artworkLike = new ArtworkLike
+			{
+				ArtworkId = artworkId,
+				UserId = userId
+			};
+
+			if (!user.LikedArtworks.Contains(artworkLike))
+			{
+				user.LikedArtworks.Add(artworkLike); // Add the ArtworkLike object to the collection
+				await _context.SaveChangesAsync();
+			}
+
+			return true;
+		}
+
+		public async Task<bool> UnlikeAsync(int artworkId, int userId)
+		{
+			var artwork = await _context.Artworks.FindAsync(artworkId);
+			var user = await _context.Users.Include(u => u.LikedArtworks).FirstOrDefaultAsync(u => u.Id == userId);
+
+			if (artwork == null || user == null) return false;
+
+			// Create an ArtworkLike entity
+			var artworkLike = new ArtworkLike
+			{
+				ArtworkId = artworkId,
+				UserId = userId
+			};
+
+			if (user.LikedArtworks.Contains(artworkLike))
+			{
+				user.LikedArtworks.Remove(artworkLike); // Remove the ArtworkLike object from the collection
+				await _context.SaveChangesAsync();
+			}
+
+			return true;
+		}
+
+
 	}
 }
