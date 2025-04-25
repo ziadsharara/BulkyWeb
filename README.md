@@ -1,47 +1,115 @@
-# ArtGallery API
+ArtGallery API Documentation
+Overview
+REST API for managing an online art gallery built with .NET 6/7 and Entity Framework Core.
 
-## Overview
-This is the backend API for an ArtGallery platform where users can manage artworks, bids, and users. It supports features like artwork creation, updating, deletion, image uploads, and secure user authentication via JWT tokens.
+🔑 Core Features
+Image uploads with artwork creation
 
-## Features
+Advanced filtering/sorting (category, tags, price, date)
 
-### **1. User Authentication**
-- **JWT Authentication**: Secure access to the platform via JWT tokens.
-- **Authorization**: Protected routes ensuring that only authenticated users can create, update, and delete artworks.
+JWT Authentication
 
-### **2. Artworks Management**
-- **Create**: Users can create new artworks by submitting details like title, description, category, price, and an image.
-- **Read**: Retrieve artwork details with various filters and sorts.
-- **Update**: Update artwork information, including title, description, price, etc.
-- **Delete**: Delete artworks from the platform.
+Like/Unlike system
 
-### **3. Image Upload**
-- Users can upload images associated with artworks.
-- Image files are stored on the server and can be accessed via a URL.
+Paginated responses
 
-### **4. API Endpoints**
-- **GET /api/artworks**: Fetch all artworks.
-- **GET /api/artworks/{id}**: Get artwork by ID.
-- **POST /api/artworks**: Create a new artwork.
-- **PUT /api/artworks/{id}**: Update artwork details.
-- **DELETE /api/artworks/{id}**: Delete an artwork.
-- **POST /api/artworks/upload-image**: Upload an image for artwork.
+📋 Endpoint Reference
+Artworks
+Endpoint	Method	Auth	Description
+/api/artworks	GET	❌	Get paginated artworks (filter/sort supported)
+/api/artworks/{id}	GET	❌	Get single artwork
+/api/artworks	POST	✅	Create new artwork
+/api/artworks/{id}	PUT	✅	Update artwork
+/api/artworks/{id}	DELETE	✅	Delete artwork
+/api/artworks/upload-image	POST	✅	Upload image file
+/api/artworks/{id}/like	POST	✅	Like artwork
+/api/artworks/{id}/unlike	POST	✅	Remove like
+🔍 Sample Requests
+1. Get Artworks (Filtered & Sorted)
+http
+GET /api/artworks?category=Portrait&sortBy=price&sortDirection=desc&pageSize=5
+Response:
 
-## Setup
+json
+{
+  "pageNumber": 1,
+  "totalCount": 23,
+  "items": [
+    {
+      "id": 42,
+      "title": "Mona Lisa",
+      "price": 9999,
+      "imageUrl": "/uploads/mona.jpg",
+      "likes": 1056
+    }
+  ]
+}
+2. Upload Image
+http
+POST /api/artworks/upload-image
+Content-Type: multipart/form-data
 
-### **1. Prerequisites**
-- .NET 9.0 SDK
-- SQL Server
-- Postman or any API testing tool
+[image file]
+Response:
 
-### **2. Environment Variables**
-Ensure to configure the following in the `appsettings.json` or in your environment variables:
-- `DefaultConnection`: Connection string to your SQL database.
-- `Jwt:Issuer`: Issuer of the JWT token.
-- `Jwt:Audience`: Audience of the JWT token.
-- `Jwt:Key`: Secret key used for signing the JWT token.
+json
+{
+  "imageUrl": "/uploads/abc123.jpg"
+}
+⚙️ Setup
+Clone & Install
 
-## Future Enhancements
-Real-time features using sockets (e.g., notifications, live bids).
-Integration with payment gateways for handling transactions.
+bash
+git clone https://github.com/yourrepo/ArtGallery
+dotnet restore
+Database
 
+bash
+dotnet ef database update
+Run
+
+bash
+dotnet run
+🛠️ Tech Stack
+Backend: .NET 6/7
+
+Database: SQL Server (EF Core)
+
+Auth: JWT Bearer Tokens
+
+Docs: Swagger UI
+
+📌 Database Schema
+Diagram
+Code
+
+
+
+
+
+
+
+
+
+
+
+
+
+🚧 Future Roadmap
+User rating system
+
+Artwork commenting
+
+Advanced search filters
+
+Admin moderation panel
+
+💡 Tip: Use Authorization: Bearer [token] header for protected endpoints.
+
+This version:
+✅ Clean, scannable layout
+✅ Tables for endpoints
+✅ Minimal emoji use
+✅ Code snippets where needed
+✅ Mermaid diagram for DB schema
+✅ Direct to-the-point structure
