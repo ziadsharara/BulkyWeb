@@ -41,6 +41,24 @@
               "type": "string",
               "default": "desc"
             }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
           }
         ],
         "responses": {
@@ -498,8 +516,7 @@
           },
           "timestamp": {
             "type": "string",
-            "format": "date-time",
-            "readOnly": true
+            "format": "date-time"
           }
         },
         "additionalProperties": false

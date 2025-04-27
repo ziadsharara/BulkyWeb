@@ -41,7 +41,7 @@ namespace ArtGallery.Application.Services
 			};
 
 			_db.Users.Add(user);
-			await _db.SaveChangesAsync();
+			await _db.SaveChangesAsync(); 
 
 			var token = GenerateJwtToken(user);
 
@@ -54,6 +54,7 @@ namespace ArtGallery.Application.Services
 				Token = token
 			};
 		}
+
 
 		public async Task<AuthResponseDto> LoginAsync(LoginDto dto)
 		{
@@ -82,25 +83,31 @@ namespace ArtGallery.Application.Services
 		{
 			var jwt = _config.GetSection("Jwt");
 			var key = Encoding.UTF8.GetBytes(jwt["Key"]!);
-			var expires = DateTime.UtcNow.AddMinutes(double.Parse(jwt["DurationMinutes"]!));
+
+			var durationMinutes = jwt["DurationMinutes"];
+			if (string.IsNullOrEmpty(durationMinutes) || !double.TryParse(durationMinutes, out var result))
+			{
+				throw new InvalidOperationException("Invalid or missing Jwt DurationMinutes.");
+			}
+
+			var expires = DateTime.UtcNow.AddMinutes(result);
 
 			var claims = new[] {
-		new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-		new Claim(JwtRegisteredClaimNames.Email, user.Email),
-		new Claim("role", user.Role)
-};
-
+														new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+														new Claim(JwtRegisteredClaimNames.Email, user.Email),
+														new Claim("role", user.Role)
+												};
 
 			var creds = new SigningCredentials(
-					new SymmetricSecurityKey(key),
-					SecurityAlgorithms.HmacSha256);
+							new SymmetricSecurityKey(key),
+							SecurityAlgorithms.HmacSha256);
 
 			var token = new JwtSecurityToken(
-					issuer: jwt["Issuer"],
-					audience: jwt["Audience"],
-					claims: claims,
-					expires: expires,
-					signingCredentials: creds);
+							issuer: jwt["Issuer"],
+							audience: jwt["Audience"],
+							claims: claims,
+							expires: expires,
+							signingCredentials: creds);
 
 			return new JwtSecurityTokenHandler().WriteToken(token);
 		}

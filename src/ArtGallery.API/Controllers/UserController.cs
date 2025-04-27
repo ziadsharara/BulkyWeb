@@ -49,9 +49,15 @@ namespace ArtGallery.API.Controllers
 		[HttpGet("me")]
 		public IActionResult Me()
 		{
-			// The sub claim holds the user ID
 			var userId = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+
+			if (string.IsNullOrEmpty(userId))
+			{
+				return Unauthorized(new { message = "User ID is missing in the token" });
+			}
+
 			return Ok(new { userId });
 		}
+
 	}
 }

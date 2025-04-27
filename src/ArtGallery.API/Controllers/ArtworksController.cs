@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using ArtGallery.Domain.Entities;
 
 namespace ArtGallery.API.Controllers
 {
@@ -75,6 +76,7 @@ namespace ArtGallery.API.Controllers
 			var userId = GetUserIdFromToken();
 			if (userId == null) return Unauthorized("Invalid or missing token.");
 
+			// رفع الصورة لو موجودة
 			if (file != null && file.Length > 0)
 			{
 				var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
@@ -93,10 +95,9 @@ namespace ArtGallery.API.Controllers
 				dto.ImageUrl = $"/uploads/{name}";
 			}
 
-			var created = await _service.CreateAsync(dto, userId.Value);  // Pass userId here
+			var created = await _service.CreateAsync(dto, userId.Value);
 			return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
 		}
-
 
 		[HttpPut("{id}")]
 		[Authorize]
@@ -114,30 +115,6 @@ namespace ArtGallery.API.Controllers
 			var deleted = await _service.DeleteAsync(id);
 			if (!deleted) return NotFound("Artwork not found.");
 			return NoContent();
-		}
-
-		[HttpPost("{id}/like")]
-		[Authorize]
-		public async Task<IActionResult> LikeArtwork(int id)
-		{
-			var userId = GetUserIdFromToken();
-			if (userId == null) return Unauthorized("Invalid or missing token.");
-
-			var result = await _service.LikeAsync(id, userId.Value);
-			if (!result) return NotFound("Artwork not found.");
-			return Ok("Liked");
-		}
-
-		[HttpPost("{id}/unlike")]
-		[Authorize]
-		public async Task<IActionResult> UnlikeArtwork(int id)
-		{
-			var userId = GetUserIdFromToken();
-			if (userId == null) return Unauthorized("Invalid or missing token.");
-
-			var result = await _service.UnlikeAsync(id, userId.Value);
-			if (!result) return NotFound("Artwork not found.");
-			return Ok("Unliked");
 		}
 
 		// ✅ Helper: Extract UserId from JWT Token

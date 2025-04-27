@@ -173,53 +173,5 @@ namespace ArtGallery.Application.Services
 			Tags = artwork.Tags,
 			ArtistId = artwork.ArtistId
 		};
-
-		public async Task<bool> LikeAsync(int artworkId, int userId)
-		{
-			var artwork = await _context.Artworks.FindAsync(artworkId);
-			var user = await _context.Users.Include(u => u.LikedArtworks).FirstOrDefaultAsync(u => u.Id == userId);
-
-			if (artwork == null || user == null) return false;
-
-			// Create an ArtworkLike entity
-			var artworkLike = new ArtworkLike
-			{
-				ArtworkId = artworkId,
-				UserId = userId
-			};
-
-			if (!user.LikedArtworks.Contains(artworkLike))
-			{
-				user.LikedArtworks.Add(artworkLike); // Add the ArtworkLike object to the collection
-				await _context.SaveChangesAsync();
-			}
-
-			return true;
-		}
-
-		public async Task<bool> UnlikeAsync(int artworkId, int userId)
-		{
-			var artwork = await _context.Artworks.FindAsync(artworkId);
-			var user = await _context.Users.Include(u => u.LikedArtworks).FirstOrDefaultAsync(u => u.Id == userId);
-
-			if (artwork == null || user == null) return false;
-
-			// Create an ArtworkLike entity
-			var artworkLike = new ArtworkLike
-			{
-				ArtworkId = artworkId,
-				UserId = userId
-			};
-
-			if (user.LikedArtworks.Contains(artworkLike))
-			{
-				user.LikedArtworks.Remove(artworkLike); // Remove the ArtworkLike object from the collection
-				await _context.SaveChangesAsync();
-			}
-
-			return true;
-		}
-
-
 	}
 }

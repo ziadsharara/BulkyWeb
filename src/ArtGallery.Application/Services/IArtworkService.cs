@@ -12,8 +12,5 @@ namespace ArtGallery.Application.Services
 		Task<bool> UpdateAsync(int id, ArtworkDto dto);
 		Task<bool> DeleteAsync(int id);
 
-		Task<bool> LikeAsync(int artworkId, int userId);
-		Task<bool> UnlikeAsync(int artworkId, int userId);
-
 	}
 }

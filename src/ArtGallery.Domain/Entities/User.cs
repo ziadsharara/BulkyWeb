@@ -13,9 +13,10 @@ namespace ArtGallery.Domain.Entities
 		public string PasswordHash { get; set; } = default!;
 		public string Email { get; set; } = default!;
 		public string Role { get; set; } = default!; // "Admin", "Artist", "Buyer"
-		public ICollection<Artwork> Artworks { get; set; }
-		public ICollection<Bid> Bids { get; set; }
-		public ICollection<ArtworkLike> LikedArtworks { get; set; } = new List<ArtworkLike>(); 
+
+		public ICollection<Artwork> Artworks { get; set; } = new List<Artwork>();
+		public ICollection<Bid> Bids { get; set; } = new List<Bid>();
 	}
+
 
 }
