@@ -33,6 +33,12 @@ namespace ArtGallery.Infrastructure.Migrations
                     b.Property<int>("ArtistId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("AuctionEndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("AuctionStartTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -45,14 +51,15 @@ namespace ArtGallery.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
                     b.PrimitiveCollection<string>("Tags")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
@@ -80,11 +87,11 @@ namespace ArtGallery.Infrastructure.Migrations
                     b.Property<int>("ArtworkId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("BidTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("BuyerId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -106,6 +113,9 @@ namespace ArtGallery.Infrastructure.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()

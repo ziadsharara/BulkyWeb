@@ -86,7 +86,7 @@ namespace ArtGallery.Infrastructure.Migrations
                     b.Property<int>("BuyerId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Timestamp")
+                    b.Property<DateTime>("BidTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");

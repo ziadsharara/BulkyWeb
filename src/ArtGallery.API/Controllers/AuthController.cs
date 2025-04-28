@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ArtGallery.Application.DTOs;
 using ArtGallery.Application.Services;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
 namespace ArtGallery.API.Controllers
 {
@@ -9,12 +12,23 @@ namespace ArtGallery.API.Controllers
 	public class AuthController : ControllerBase
 	{
 		private readonly IAuthService _auth;
+		private readonly ILogger<AuthController> _logger;
 
-		public AuthController(IAuthService auth) => _auth = auth;
+		public AuthController(IAuthService auth, ILogger<AuthController> logger)
+		{
+			_auth = auth;
+			_logger = logger;
+		}
 
 		[HttpPost("register")]
 		public async Task<IActionResult> Register([FromBody] RegisterDto dto)
 		{
+			if (dto == null)
+			{
+				_logger.LogWarning("Register request received with empty body.");
+				return BadRequest(new { message = "Invalid registration data." });
+			}
+
 			try
 			{
 				var result = await _auth.RegisterAsync(dto);
@@ -22,6 +36,7 @@ namespace ArtGallery.API.Controllers
 			}
 			catch (InvalidOperationException ex)
 			{
+				_logger.LogError(ex, "Error during registration.");
 				return BadRequest(new { message = ex.Message });
 			}
 		}
@@ -29,14 +44,21 @@ namespace ArtGallery.API.Controllers
 		[HttpPost("login")]
 		public async Task<IActionResult> Login([FromBody] LoginDto dto)
 		{
+			if (dto == null)
+			{
+				_logger.LogWarning("Login request received with empty body.");
+				return BadRequest(new { message = "Invalid login data." });
+			}
+
 			var result = await _auth.LoginAsync(dto);
 			if (result == null)
-				return Unauthorized("Invalid credentials");
+			{
+				_logger.LogWarning("Failed login attempt.");
+				return Unauthorized(new { message = "Invalid credentials" });
+			}
 
-			Console.WriteLine(result);
-
-			return Ok(result);
+			_logger.LogInformation("User logged in successfully.");
+			return Ok(result);  // This would usually return a JWT or some other login token
 		}
-
 	}
 }

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "yKYf7QFf1z8oDRsyTjuV6cd+sk117m9LjVw/pqV1UZs=",
+  "Hash": "y6lNvH94QWl5BYOgUOpJA8Yb0DMTJlTxY8TYQX0y5VU=",
   "Source": "ArtGallery.API",
   "BasePath": "_content/ArtGallery.API",
   "Mode": "Default",
@@ -16,6 +16,27 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\uploads\\202280ba-dfbf-4218-bedd-5cf79cfba9bc.jpg",
+      "SourceId": "ArtGallery.API",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\",
+      "BasePath": "_content/ArtGallery.API",
+      "RelativePath": "uploads/202280ba-dfbf-4218-bedd-5cf79cfba9bc#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "1kgqitexw3",
+      "Integrity": "ryNWOrf0lU3HlOPGCvS+9246vxoJw9WQwtWcAEOsoo0=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\202280ba-dfbf-4218-bedd-5cf79cfba9bc.jpg"
+    },
     {
       "Identity": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\uploads\\96032b50-5a55-4564-9ecd-19b5f5b4d94d.png",
       "SourceId": "ArtGallery.API",
@@ -39,6 +60,88 @@
     }
   ],
   "Endpoints": [
+    {
+      "Route": "uploads/202280ba-dfbf-4218-bedd-5cf79cfba9bc.1kgqitexw3.jpg",
+      "AssetFile": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\uploads\\202280ba-dfbf-4218-bedd-5cf79cfba9bc.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "116358"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ryNWOrf0lU3HlOPGCvS+9246vxoJw9WQwtWcAEOsoo0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 26 Apr 2025 20:48:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "1kgqitexw3"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/202280ba-dfbf-4218-bedd-5cf79cfba9bc.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ryNWOrf0lU3HlOPGCvS+9246vxoJw9WQwtWcAEOsoo0="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/202280ba-dfbf-4218-bedd-5cf79cfba9bc.jpg",
+      "AssetFile": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\uploads\\202280ba-dfbf-4218-bedd-5cf79cfba9bc.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "116358"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ryNWOrf0lU3HlOPGCvS+9246vxoJw9WQwtWcAEOsoo0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 26 Apr 2025 20:48:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ryNWOrf0lU3HlOPGCvS+9246vxoJw9WQwtWcAEOsoo0="
+        }
+      ]
+    },
     {
       "Route": "uploads/96032b50-5a55-4564-9ecd-19b5f5b4d94d.593cjql44e.png",
       "AssetFile": "D:\\Projects\\ArtGallery\\src\\ArtGallery.API\\wwwroot\\uploads\\96032b50-5a55-4564-9ecd-19b5f5b4d94d.png",

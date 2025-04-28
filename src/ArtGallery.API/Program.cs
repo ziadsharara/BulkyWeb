@@ -13,29 +13,31 @@ using ArtGallery.API.Hubs;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
-// 1) Connection string
+// 1) Connection string: Connect to the ArtGalleryDb database
 var connectionString = configuration.GetConnectionString("DefaultConnection")
 		?? throw new InvalidOperationException("Connection string 'DefaultConnection' is not configured.");
 
-// 2) EF Core
+// 2) EF Core: Add DbContext for AppDbContext using SQL Server
 builder.Services.AddDbContext<AppDbContext>(options =>
 		options.UseSqlServer(connectionString));
 
-// 3) Application & Infrastructure services
-builder.Services.AddApplicationServices();
-builder.Services.AddInfrastructureServices(connectionString);
+// 3) Core services: Register all application-level and infrastructure-level services
+builder.Services.AddApplicationServices();          // registers ArtworkService, AuthService, etc.
+builder.Services.AddInfrastructureServices(connectionString); // registers repositories, migrations, etc.
 
-// 4) AuthService & AuctionService
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IAuctionService, AuctionService>();
+// 4) Explicit scoped registrations for user, auction & admin flows
+builder.Services.AddScoped<IUserService, UserService>();     // user self-registration & login
+builder.Services.AddScoped<IAuthService, AuthService>();     // full JWT auth flows
+builder.Services.AddScoped<IAuctionService, AuctionService>(); // real-time bidding
+builder.Services.AddScoped<IAdminService, AdminService>();   // approve/reject artists & artworks
 
-// 5) Controllers
+// 5) Controllers: Add MVC controllers to handle API endpoints
 builder.Services.AddControllers();
 
-// 6) JWT Authentication
+// 6) JWT Authentication: Configure JWT bearer scheme
 var jwt = configuration.GetSection("Jwt");
-var key = Encoding.UTF8.GetBytes(jwt["Key"] ?? throw new InvalidOperationException("JWT Key is not configured."));
-
+var keyBytes = Encoding.UTF8.GetBytes(jwt["Key"]
+		?? throw new InvalidOperationException("JWT Key is not configured."));
 builder.Services
 		.AddAuthentication(options =>
 		{
@@ -48,20 +50,26 @@ builder.Services
 			options.SaveToken = true;
 			options.TokenValidationParameters = new TokenValidationParameters
 			{
-				ValidateIssuer = true,
-				ValidateAudience = true,
-				ValidateLifetime = true,
 				ValidateIssuerSigningKey = true,
-
+				IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
+				ValidateIssuer = true,
 				ValidIssuer = jwt["Issuer"],
+				ValidateAudience = true,
 				ValidAudience = jwt["Audience"],
-				IssuerSigningKey = new SymmetricSecurityKey(key),
-
+				ValidateLifetime = true,
 				ClockSkew = TimeSpan.Zero
 			};
 		});
 
-// 7) Swagger / OpenAPI
+// 7) Authorization: Policies for each role
+builder.Services.AddAuthorization(options =>
+{
+	options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+	options.AddPolicy("ArtistOnly", policy => policy.RequireRole("Artist"));
+	options.AddPolicy("BuyerOnly", policy => policy.RequireRole("Buyer"));
+});
+
+// 8) Swagger / OpenAPI: API documentation
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -69,21 +77,21 @@ builder.Services.AddSwaggerGen(c =>
 	{
 		Title = "ArtGallery API",
 		Version = "v1",
-		Description = "Manage artworks, bids and users"
+		Description = "Manage users, artists, artworks & bids"
 	});
 });
 
-// 8) SignalR
+// 9) SignalR: Real-time auction hub
 builder.Services.AddSignalR();
 
 var app = builder.Build();
 
-// 9) Ensure uploads folder exists
+// 10) Ensure uploads folder exists (for artwork image uploads)
 var uploadsPath = Path.Combine(app.Environment.WebRootPath ?? "wwwroot", "uploads");
 if (!Directory.Exists(uploadsPath))
 	Directory.CreateDirectory(uploadsPath);
 
-// 10) Middleware pipeline
+// 11) Middleware pipeline
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
@@ -96,7 +104,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Serve static files
+// Serve static files (wwwroot & uploads folder)
 app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions
 {
@@ -108,10 +116,10 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseAuthentication();
 app.UseAuthorization();
 
-// SignalR Hub
+// Map the real-time Auction hub
 app.MapHub<AuctionHub>("/hubs/auction");
 
-// Controllers
+// Map API controllers
 app.MapControllers();
 
 app.Run();

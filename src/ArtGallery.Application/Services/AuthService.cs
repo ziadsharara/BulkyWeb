@@ -24,6 +24,7 @@ namespace ArtGallery.Application.Services
 			_config = config;
 		}
 
+		/// <inheritdoc/>
 		public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto)
 		{
 			if (await _db.Users.AnyAsync(u => u.Email == dto.Email))
@@ -41,7 +42,7 @@ namespace ArtGallery.Application.Services
 			};
 
 			_db.Users.Add(user);
-			await _db.SaveChangesAsync(); 
+			await _db.SaveChangesAsync();
 
 			var token = GenerateJwtToken(user);
 
@@ -55,7 +56,7 @@ namespace ArtGallery.Application.Services
 			};
 		}
 
-
+		/// <inheritdoc/>
 		public async Task<AuthResponseDto> LoginAsync(LoginDto dto)
 		{
 			var user = await _db.Users.SingleOrDefaultAsync(u => u.Email == dto.Email);
@@ -79,35 +80,33 @@ namespace ArtGallery.Application.Services
 			};
 		}
 
+		/// <summary>
+		/// Generates a JWT containing a custom "userId" claim (plus sub, email & role).
+		/// </summary>
 		private string GenerateJwtToken(User user)
 		{
 			var jwt = _config.GetSection("Jwt");
-			var key = Encoding.UTF8.GetBytes(jwt["Key"]!);
+			var keyBytes = Encoding.UTF8.GetBytes(jwt["Key"]!);
+			var expiresIn = DateTime.UtcNow.AddMinutes(double.Parse(jwt["DurationMinutes"]!));
 
-			var durationMinutes = jwt["DurationMinutes"];
-			if (string.IsNullOrEmpty(durationMinutes) || !double.TryParse(durationMinutes, out var result))
+			var claims = new[]
 			{
-				throw new InvalidOperationException("Invalid or missing Jwt DurationMinutes.");
-			}
+								new Claim("userId", user.Id.ToString()),                   // <-- custom claim
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+								new Claim(JwtRegisteredClaimNames.Email, user.Email),
+								new Claim("role", user.Role)
+						};
 
-			var expires = DateTime.UtcNow.AddMinutes(result);
-
-			var claims = new[] {
-														new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-														new Claim(JwtRegisteredClaimNames.Email, user.Email),
-														new Claim("role", user.Role)
-												};
-
-			var creds = new SigningCredentials(
-							new SymmetricSecurityKey(key),
-							SecurityAlgorithms.HmacSha256);
+			var creds = new SigningCredentials(new SymmetricSecurityKey(keyBytes),
+																				 SecurityAlgorithms.HmacSha256);
 
 			var token = new JwtSecurityToken(
-							issuer: jwt["Issuer"],
-							audience: jwt["Audience"],
-							claims: claims,
-							expires: expires,
-							signingCredentials: creds);
+					issuer: jwt["Issuer"],
+					audience: jwt["Audience"],
+					claims: claims,
+					expires: expiresIn,
+					signingCredentials: creds
+			);
 
 			return new JwtSecurityTokenHandler().WriteToken(token);
 		}

@@ -1,15 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ArtGallery.Application.DTOs;
-
-public class RegisterDto
+﻿namespace ArtGallery.Application.DTOs
 {
-	public string Username { get; set; }
-	public string Email { get; set; }
-	public string Password { get; set; }
-	public string Role { get; set; }
+	/// <summary>
+	/// Data Transfer Object (DTO) used for user registration.
+	/// Contains the necessary information to create a new user account.
+	/// </summary>
+	public class RegisterDto
+	{
+		/// <summary>
+		/// The user's full name.
+		/// </summary>
+		public string Username { get; set; } = string.Empty;
+
+		/// <summary>
+		/// The user's email address.
+		/// Must be unique and in a valid email format.
+		/// </summary>
+		public string Email { get; set; } = string.Empty;
+
+		/// <summary>
+		/// The user's password.
+		/// Should be stored securely after hashing.
+		/// </summary>
+		public string Password { get; set; } = string.Empty;
+
+		/// <summary>
+		/// The role assigned to the user (e.g., Admin, Artist, Buyer).
+		/// </summary>
+		public string Role { get; set; } = string.Empty;
+	}
 }

@@ -1,127 +1,196 @@
 ﻿using ArtGallery.Application.DTOs;
 using ArtGallery.Application.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using System.IO;
+using Microsoft.AspNetCore.SignalR;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Security.Claims;
-using ArtGallery.Domain.Entities;
+using ArtGallery.API.Hubs;
 
-namespace ArtGallery.API.Controllers
+namespace ArtGallery.Api.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class ArtworksController : ControllerBase
+	public class ArtworkController : ControllerBase
 	{
-		private readonly IArtworkService _service;
-		private static readonly string[] _allowedExt = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+		private readonly IArtworkService _artworkService;
+		private readonly IHubContext<AuctionHub> _auctionHubContext;  // WebSocket (SignalR) Hub
 
-		public ArtworksController(IArtworkService service)
+		public ArtworkController(IArtworkService artworkService, IHubContext<AuctionHub> bidHubContext)
 		{
-			_service = service;
+			_artworkService = artworkService;
+			_auctionHubContext = bidHubContext;
 		}
 
+		// --------------------------------------------------------------------------------
+		// Create a new artwork
+		// --------------------------------------------------------------------------------
+		[HttpPost]
+		public async Task<ActionResult<ArtworkDto>> Create([FromBody] CreateArtworkDto dto)
+		{
+			try
+			{
+				var userId = 1; // This should be fetched from the authenticated user context
+				var artwork = await _artworkService.CreateAsync(dto, userId);
+				return CreatedAtAction(nameof(GetById), new { id = artwork.Id }, artwork);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+		// --------------------------------------------------------------------------------
+		// Retrieve all artworks with filters, sorting, and pagination
+		// --------------------------------------------------------------------------------
 		[HttpGet]
-		public async Task<IActionResult> GetAll(
-				[FromQuery] string? category,
-				[FromQuery] string? tag,
-				[FromQuery] string sortBy = "date",
-				[FromQuery] string sortDirection = "desc",
-				[FromQuery] int pageNumber = 1,
-				[FromQuery] int pageSize = 10
-		)
+		public async Task<ActionResult<PagedResult<ArtworkDto>>> GetAll(
+						[FromQuery] string? category,
+						[FromQuery] string? tag,
+						[FromQuery] string sortBy = "createdat",
+						[FromQuery] string sortDirection = "desc",
+						[FromQuery] int pageNumber = 1,
+						[FromQuery] int pageSize = 10,
+						[FromQuery] string? artistName = null,
+						[FromQuery] string? tags = null)
 		{
-			var paged = await _service.GetAllAsync(category, tag, sortBy, sortDirection, pageNumber, pageSize);
-			return Ok(paged);
+			try
+			{
+				var result = await _artworkService.GetAllAsync(category, tag, sortBy, sortDirection, pageNumber, pageSize, artistName, tags);
+				return Ok(result);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
 		}
 
+		// --------------------------------------------------------------------------------
+		// Get a single artwork by ID
+		// --------------------------------------------------------------------------------
 		[HttpGet("{id}")]
-		public async Task<IActionResult> GetById(int id)
+		public async Task<ActionResult<ArtworkDto>> GetById(int id)
 		{
-			var artwork = await _service.GetByIdAsync(id);
-			if (artwork == null) return NotFound("Artwork not found.");
+			var artwork = await _artworkService.GetByIdAsync(id);
+			if (artwork == null) return NotFound();
 			return Ok(artwork);
 		}
 
-		[HttpPost("upload-image")]
-		[Authorize]
-		public async Task<IActionResult> UploadImage(IFormFile file)
-		{
-			if (file == null || file.Length == 0)
-				return BadRequest("No file uploaded.");
-
-			var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-			if (!_allowedExt.Contains(ext))
-				return BadRequest("Only image files are allowed.");
-
-			var uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-			if (!Directory.Exists(uploads))
-				Directory.CreateDirectory(uploads);
-
-			var name = $"{Guid.NewGuid()}{ext}";
-			var path = Path.Combine(uploads, name);
-			using var stream = new FileStream(path, FileMode.Create);
-			await file.CopyToAsync(stream);
-
-			return Ok(new { imageUrl = $"/uploads/{name}" });
-		}
-
-		[HttpPost]
-		[Authorize]
-		public async Task<IActionResult> Create([FromForm] CreateArtworkDto dto, IFormFile? file)
-		{
-			var userId = GetUserIdFromToken();
-			if (userId == null) return Unauthorized("Invalid or missing token.");
-
-			// رفع الصورة لو موجودة
-			if (file != null && file.Length > 0)
-			{
-				var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-				if (!_allowedExt.Contains(ext))
-					return BadRequest("Only image files are allowed.");
-
-				var uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-				if (!Directory.Exists(uploads))
-					Directory.CreateDirectory(uploads);
-
-				var name = $"{Guid.NewGuid()}{ext}";
-				var path = Path.Combine(uploads, name);
-				using var stream = new FileStream(path, FileMode.Create);
-				await file.CopyToAsync(stream);
-
-				dto.ImageUrl = $"/uploads/{name}";
-			}
-
-			var created = await _service.CreateAsync(dto, userId.Value);
-			return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
-		}
-
+		// --------------------------------------------------------------------------------
+		// Update an existing artwork
+		// --------------------------------------------------------------------------------
 		[HttpPut("{id}")]
-		[Authorize]
-		public async Task<IActionResult> Update(int id, [FromBody] ArtworkDto dto)
+		public async Task<ActionResult> Update(int id, [FromBody] ArtworkDto dto)
 		{
-			var updated = await _service.UpdateAsync(id, dto);
-			if (!updated) return NotFound("Artwork not found.");
-			return NoContent();
+			try
+			{
+				var success = await _artworkService.UpdateAsync(id, dto);
+				if (!success) return NotFound();
+				return NoContent();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
 		}
 
+		// --------------------------------------------------------------------------------
+		// Delete an artwork by ID
+		// --------------------------------------------------------------------------------
 		[HttpDelete("{id}")]
-		[Authorize]
-		public async Task<IActionResult> Delete(int id)
+		public async Task<ActionResult> Delete(int id)
 		{
-			var deleted = await _service.DeleteAsync(id);
-			if (!deleted) return NotFound("Artwork not found.");
-			return NoContent();
+			try
+			{
+				var success = await _artworkService.DeleteAsync(id);
+				if (!success) return NotFound();
+				return NoContent();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
 		}
 
-		// ✅ Helper: Extract UserId from JWT Token
-		private int? GetUserIdFromToken()
+		// --------------------------------------------------------------------------------
+		// Place a bid on an artwork
+		// --------------------------------------------------------------------------------
+		[HttpPost("{artworkId}/bid")]
+		public async Task<ActionResult> PlaceBid(int artworkId, [FromBody] BidDto bidDto)
 		{
-			var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-			return claim != null && int.TryParse(claim.Value, out var id) ? id : null;
+			try
+			{
+				var success = await _artworkService.PlaceBidAsync(artworkId, bidDto.BuyerId, bidDto.Amount);
+				if (!success) return BadRequest("Bid failed.");
+
+				// Notify clients in real-time via WebSocket
+				await _auctionHubContext.Clients.All.SendAsync("ReceiveBidUpdate", artworkId, bidDto.Amount, DateTime.Now);
+
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+		// --------------------------------------------------------------------------------
+		// Get the bid history for an artwork
+		// --------------------------------------------------------------------------------
+		[HttpGet("{artworkId}/bids")]
+		public async Task<ActionResult<IEnumerable<BidDto>>> GetBidHistory(int artworkId)
+		{
+			try
+			{
+				var bids = await _artworkService.GetBidHistoryAsync(artworkId);
+				return Ok(bids);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+		// --------------------------------------------------------------------------------
+		// Extend auction time for an artwork
+		// --------------------------------------------------------------------------------
+		[HttpPut("{artworkId}/extend-auction")]
+		public async Task<ActionResult> ExtendAuctionTime(int artworkId, [FromBody] DateTime newEndTime)
+		{
+			try
+			{
+				var artistId = 1; // This should be fetched from the authenticated user context
+				var success = await _artworkService.ExtendAuctionTimeAsync(artworkId, newEndTime, artistId);
+				if (!success) return BadRequest("Failed to extend auction time.");
+
+				// Notify clients in real-time via WebSocket about auction extension
+				await _auctionHubContext.Clients.All.SendAsync("ReceiveAuctionExtension", artworkId, newEndTime);
+
+				return NoContent();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+		// --------------------------------------------------------------------------------
+		// Get the winner of an artwork's auction
+		// --------------------------------------------------------------------------------
+		[HttpGet("{artworkId}/winner")]
+		public async Task<ActionResult<BidDto>> GetWinner(int artworkId)
+		{
+			try
+			{
+				var artistId = 1; // This should be fetched from the authenticated user context
+				var winner = await _artworkService.GetWinnerAsync(artworkId, artistId);
+				if (winner == null) return NotFound();
+				return Ok(winner);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
 		}
 	}
 }

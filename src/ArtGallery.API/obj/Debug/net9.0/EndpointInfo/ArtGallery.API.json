@@ -2,14 +2,228 @@
   "openapi": "3.0.4",
   "info": {
     "title": "ArtGallery API",
-    "description": "Manage artworks, bids and users",
+    "description": "Manage users, artists, artworks & bids",
     "version": "v1"
   },
   "paths": {
-    "/api/Artworks": {
+    "/api/Admin/artists/pending": {
       "get": {
         "tags": [
-          "Artworks"
+          "Admin"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Admin/artists/{artistId}/approve": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "artistId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Admin/artists/{artistId}/reject": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "artistId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Admin/artworks/pending": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ArtworkDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ArtworkDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ArtworkDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Admin/artworks/{artworkId}/approve": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "artworkId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Admin/artworks/{artworkId}/reject": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "artworkId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Artwork": {
+      "post": {
+        "tags": [
+          "Artwork"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateArtworkDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateArtworkDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateArtworkDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtworkDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtworkDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtworkDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Artwork"
         ],
         "parameters": [
           {
@@ -31,7 +245,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "default": "date"
+              "default": "createdat"
             }
           },
           {
@@ -59,96 +273,50 @@
               "format": "int32",
               "default": 10
             }
+          },
+          {
+            "name": "artistName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Artworks"
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "Title": {
-                    "type": "string"
-                  },
-                  "Description": {
-                    "type": "string"
-                  },
-                  "Price": {
-                    "type": "number",
-                    "format": "double"
-                  },
-                  "Category": {
-                    "type": "string"
-                  },
-                  "Tags": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "ImageUrl": {
-                    "type": "string"
-                  },
-                  "ArtistId": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
-                  }
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtworkDtoPagedResult"
                 }
               },
-              "encoding": {
-                "Title": {
-                  "style": "form"
-                },
-                "Description": {
-                  "style": "form"
-                },
-                "Price": {
-                  "style": "form"
-                },
-                "Category": {
-                  "style": "form"
-                },
-                "Tags": {
-                  "style": "form"
-                },
-                "ImageUrl": {
-                  "style": "form"
-                },
-                "ArtistId": {
-                  "style": "form"
-                },
-                "file": {
-                  "style": "form"
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtworkDtoPagedResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtworkDtoPagedResult"
                 }
               }
             }
           }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
         }
       }
     },
-    "/api/Artworks/{id}": {
+    "/api/Artwork/{id}": {
       "get": {
         "tags": [
-          "Artworks"
+          "Artwork"
         ],
         "parameters": [
           {
@@ -163,13 +331,30 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtworkDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtworkDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtworkDto"
+                }
+              }
+            }
           }
         }
       },
       "put": {
         "tags": [
-          "Artworks"
+          "Artwork"
         ],
         "parameters": [
           {
@@ -209,7 +394,7 @@
       },
       "delete": {
         "tags": [
-          "Artworks"
+          "Artwork"
         ],
         "parameters": [
           {
@@ -229,27 +414,37 @@
         }
       }
     },
-    "/api/Artworks/upload-image": {
+    "/api/Artwork/{artworkId}/bid": {
       "post": {
         "tags": [
-          "Artworks"
+          "Artwork"
+        ],
+        "parameters": [
+          {
+            "name": "artworkId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
         ],
         "requestBody": {
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              },
-              "encoding": {
-                "file": {
-                  "style": "form"
-                }
+                "$ref": "#/components/schemas/BidDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BidDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/BidDto"
               }
             }
           }
@@ -257,6 +452,140 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Artwork/{artworkId}/bids": {
+      "get": {
+        "tags": [
+          "Artwork"
+        ],
+        "parameters": [
+          {
+            "name": "artworkId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BidDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BidDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BidDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Artwork/{artworkId}/extend-auction": {
+      "put": {
+        "tags": [
+          "Artwork"
+        ],
+        "parameters": [
+          {
+            "name": "artworkId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Artwork/{artworkId}/winner": {
+      "get": {
+        "tags": [
+          "Artwork"
+        ],
+        "parameters": [
+          {
+            "name": "artworkId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BidDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BidDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BidDto"
+                }
+              }
+            }
           }
         }
       }
@@ -481,10 +810,6 @@
             "type": "string",
             "nullable": true
           },
-          "imageUrl": {
-            "type": "string",
-            "nullable": true
-          },
           "tags": {
             "type": "array",
             "items": {
@@ -492,9 +817,46 @@
             },
             "nullable": true
           },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
           "artistId": {
             "type": "integer",
             "format": "int32"
+          },
+          "auctionStartTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "auctionEndTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ArtworkDtoPagedResult": {
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ArtworkDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -514,7 +876,48 @@
             "type": "number",
             "format": "double"
           },
-          "timestamp": {
+          "bidTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateArtworkDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "auctionStartTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "auctionEndTime": {
             "type": "string",
             "format": "date-time"
           }
@@ -551,6 +954,32 @@
             "nullable": true
           },
           "role": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "type": "string",
+            "nullable": true
+          },
+          "token": {
             "type": "string",
             "nullable": true
           }
