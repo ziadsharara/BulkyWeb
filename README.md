@@ -1,4 +1,4 @@
-# 🎨 ArtGallery API
+# 🎨 Bulky Web
 
 A RESTful API for managing an online art gallery built with .NET.
 
