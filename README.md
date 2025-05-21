@@ -31,11 +31,11 @@ Welcome to **Bulky Web**, an advanced online bookstore designed to provide a sea
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/ziadsharara/Mystro.git
+   git clone https://github.com/ziadsharara/BulkyWeb.git
    ```
 2. **Navigate to the project directory:**
    ```sh
-   cd Mystro
+   cd BulkyWeb
    ```
 3. **Configure the database:**
    - Update `appsettings.json` with your database connection string.
